@@ -47,7 +47,7 @@ where null-terminator `\0` is not contained.
   The base point ![](http://latex.codecogs.com/gif.latex?%5Cmathbf%7BG%7D) is
 
   <p align="center">
-  <img src="http://latex.codecogs.com/gif.latex?%5Cmathbf%7BG%7D%3D%28G_x%2CG_y%29%3D%5Cpar%20%28%5Ctextrm%7B0x09487239995A5EE76B55F9C2F098%7D%2C%20%5Ctextrm%7B0xA89CE5AF8724C0A23E0E0FF77500%7D%29">
+  <img src="https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20%5Cmathbf%7BG%7D%26%3D%28G_x%2C%20G_y%29%5C%5C%20%26%3D%28%5Ctextrm%7B0x09487239995A5EE76B55F9C2F098%7D%2C%5Ctextrm%7B0xA89CE5AF8724C0A23E0E0FF77500%7D%29%20%5Cend%7Balign*%7D">
   </p>
 
   whose order is
@@ -59,7 +59,7 @@ where null-terminator `\0` is not contained.
   Tuxera NTFS has stored its official public key in `/Library/PreferencePanes/Tuxera\ NTFS.prefPane/Contents/MacOS/Tuxera\ NTFS` which is
 
   <p align="center">
-  <img src="http://latex.codecogs.com/gif.latex?%5Cmathbf%7BP%7D%3D%28P_x%2CP_y%29%3D%20%5Cpar%20%28%5Ctextrm%7B0x47CFB5F7E8931EC93D42D1221E7F%7D%2C%20%5Ctextrm%7B0x985D74AF455370F347398E1B1D3E%7D%29">
+  <img src="https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20%5Cmathbf%7BP%7D%26%3D%28P_x%2C%20P_y%29%5C%5C%20%26%3D%28%5Ctextrm%7B0x47CFB5F7E8931EC93D42D1221E7F%7D%2C%5Ctextrm%7B0x985D74AF455370F347398E1B1D3E%7D%29%20%5Cend%7Balign*%7D">
   </p>
 
   So far I don't know what its private key ![](http://latex.codecogs.com/gif.latex?k) is. If you know, please tell me and I will be appreciated with your generous.
