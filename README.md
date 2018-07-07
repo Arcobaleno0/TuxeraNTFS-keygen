@@ -31,7 +31,7 @@ where null-terminator `\0` is not contained.
   The curve it uses is `secp112r1` of which the equation is
 
   <p align="center">
-  <img src="http://latex.codecogs.com/gif.latex?y%5E2%3Dx%5E3&plus;ax&plus;b">
+  <img src="https://latex.codecogs.com/gif.latex?y%5E2%5Cequiv%20x%5E3&plus;ax&plus;b%5C%20%5C%20%28mod%5C%20p%29">
   </p>
 
   over finite field ![](http://latex.codecogs.com/gif.latex?GF_p) where
