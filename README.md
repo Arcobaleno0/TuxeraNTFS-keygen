@@ -103,15 +103,15 @@ where null-terminator `\0` is not contained.
 
   5. Convert `Hash`(5 bytes) to a big number ![](http://latex.codecogs.com/gif.latex?h) with __big endian__.
 
-  6. Prepare a buffer `uint8_t bin_S[14]`. Calculate
+  6. Prepare a buffer `uint8_t bin_s[14]`. Calculate
 
      <p align="center">
-     <img src="http://latex.codecogs.com/gif.latex?S%5Cequiv%20r-h%5Ccdot%20k%5C%20%5C%20%28mod%5C%20n%29">
+     <img src="http://latex.codecogs.com/gif.latex?s%5Cequiv%20r-h%5Ccdot%20k%5C%20%5C%20%28mod%5C%20n%29">
      </p>
 
-     and save ![](http://latex.codecogs.com/gif.latex?S) to `bin_S` with __big-endian__. If big number is not 14-bytes-long, pad zero byte at __Most Significant Bit__.
+     and save ![](http://latex.codecogs.com/gif.latex?s) to `bin_s` with __big-endian__. If big number is not 14-bytes-long, pad zero byte at __Most Significant Bit__.
 
-  7. Join `bin_S`(14 bytes) and `Hash`(5 bytes) and you will get `uint8_t key_data[14 + 5]` where the first 14 bytes are `bin_S`.
+  7. Join `bin_s`(14 bytes) and `Hash`(5 bytes) and you will get `uint8_t key_data[14 + 5]` where the first 14 bytes are `bin_s`.
 
   8. Encode `key_data` by custom Base32 and you will get `prekey_str` that has 31 chars. The differences between custom Base32 and standard Base32 are:
 
@@ -137,7 +137,23 @@ where null-terminator `\0` is not contained.
 
 ### 3.1 How is Long Product Key verified?
 
-  * todo
+  1. Decode long product key to 19-bytes-long `key_data`;
+
+  2. Convert the first 14 bytes and the latter 5 bytes to big number ![](http://latex.codecogs.com/gif.latex?s) and ![](http://latex.codecogs.com/gif.latex?h) with __big endian__.
+
+  3. Calculate ![](https://latex.codecogs.com/gif.latex?s%5Cmathbf%7BG%7D&plus;h%5Cmathbf%7BP%7D) and convert the result to `uint8_t bin_R[2][14]`.
+
+  4. Use `argon2_hash` to hash `bin_R` and you will `uint8_t Hash[5]`.
+
+  5. Check if `Hash` is equal to the latter 5 bytes in `key_data`. If true the long product key is valid, otherwise invalid.
+
+  Why? Because if the long product key is valid, we must have
+
+  <p align="center">
+  <img src="https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20s%5Cmathbf%7BG%7D&plus;h%5Cmathbf%7BP%7D%26%3D%28r-h%5Ccdot%20k%29%5Cmathbf%7BG%7D&plus;h%5Cmathbf%7BP%7D%5C%5C%20%26%3Dr%5Cmathbf%7BG%7D-h%5Ccdot%20k%5Cmathbf%7BG%7D&plus;h%5Cmathbf%7BP%7D%5C%5C%20%26%3Dr%5Cmathbf%7BG%7D-h%5Cmathbf%7BP%7D&plus;h%5Cmathbf%7BP%7D%5C%5C%20%26%3Dr%5Cmathbf%7BG%7D%20%5Cend%7Balign*%7D">
+  </p>
+
+  So that `Hash` shall be equal to the latter 5 bytes in `key_data`. If not equal, the long product key must not be a valid key.
 
 ### 3.2 How is Short Product Key verified?
 
