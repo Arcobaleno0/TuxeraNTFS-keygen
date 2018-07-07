@@ -140,7 +140,7 @@ unsigned long PrintKeyInfo(const EC_KEY* lpcECKey, int* lperrno) {
     PrintBytes(binPrivateKey, binPrivateKeyLength);
     printf("\n\n");
 
-    printf("-----%s Prublic Key-----\n", CurveName);
+    printf("-----%s Public Key-----\n", CurveName);
     printf("Bin: X = ");
     PrintBytes(binPublicKeyX, binPublicKeyXLength);
     printf("\n");
