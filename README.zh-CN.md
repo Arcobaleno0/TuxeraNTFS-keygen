@@ -121,7 +121,7 @@ Tuxera NTFS将官方ECC公钥写在了`/Library/PreferencePanes/Tuxera\ NTFS.pre
 
         例如：
 
-        如果有两字节的待编码数据————`10111010` `11110100`————那么在变种Base32中编码单元为`10111` `11010` `11010` `00000`，而在标准Base32中编码单元为`10111` `01011` `11010` `00000`；即标准Base32中`01011`编码单元的两部分————`010`和`11`————在变种Base32中交换了，因为该编码单元跨过了两个字节。
+        如果有两字节的待编码数据——`10111010` `11110100`——那么在变种Base32中编码单元为`10111` `11010` `11010` `00000`，而在标准Base32中编码单元为`10111` `01011` `11010` `00000`；即标准Base32中`01011`编码单元的两部分——`010`和`11`——在变种Base32中交换了，因为该编码单元跨过了两个字节。
 
      3. 在变种Base32中，没有`=`填充字符。
 
@@ -153,7 +153,7 @@ Tuxera NTFS将官方ECC公钥写在了`/Library/PreferencePanes/Tuxera\ NTFS.pre
  <img src="https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20s%5Cmathbf%7BG%7D&plus;h%5Cmathbf%7BP%7D%26%3D%28r-h%5Ccdot%20k%29%5Cmathbf%7BG%7D&plus;h%5Cmathbf%7BP%7D%5C%5C%20%26%3Dr%5Cmathbf%7BG%7D-h%5Ccdot%20k%5Cmathbf%7BG%7D&plus;h%5Cmathbf%7BP%7D%5C%5C%20%26%3Dr%5Cmathbf%7BG%7D-h%5Cmathbf%7BP%7D&plus;h%5Cmathbf%7BP%7D%5C%5C%20%26%3Dr%5Cmathbf%7BG%7D%20%5Cend%7Balign*%7D">
 </p>
 
-所以`key_data`的后5字必然与`Hash`相同。如果不等，则长激活密钥必然不等。
+所以`key_data`的后5字必然与`Hash`相同：这是长激活密钥有效的必要条件。如果不等，则长激活密钥必然不是合法的激活密钥。
 
 ### 3.2 短激活密钥是如何被验证的？
 
