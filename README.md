@@ -1,5 +1,7 @@
 # Tuxera NTFS keygen
 
+[中文版README](README.zh-CN.md)
+
 ## 1. What is Tuxera NTFS?
 
 Tuxera NTFS is a performance optimized, fail-safe, fully compatible NTFS file system driver. It ships for example in smart TVs, set-top boxes, smartphones, tablets, routers, NAS and other devices. It is available for Android and other Linux platforms, QNX, WinCE Series 40, Nucleus RTOS and VxWorks. Supported architectures are ARM architecture, MIPS architecture, PowerPC, SuperH and x86.
