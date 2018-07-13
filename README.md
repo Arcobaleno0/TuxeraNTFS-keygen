@@ -204,7 +204,7 @@ where null-terminator `\0` is not contained.
 
 ## 5. How to use?
 
-  __Last Test Time: 2018-07-07__
+  __Last Test Time: 2018-07-13__
 
   __Last Test Version: 2018 (released 2018-01-25)__ Download from [here](https://www.tuxera.com/products/tuxera-ntfs-for-mac/):
 
