@@ -56,7 +56,19 @@ Tuxera NTFS是使用 __ECC (Elliptic-curve Cryptography)__ 来生成长激活密
 <img src="http://latex.codecogs.com/gif.latex?n%3D%5Ctextrm%7B0xDB7C2ABF62E35E7628DFAC6561C5%7D">
 </p>
 
-Tuxera NTFS将官方ECC公钥写在了`/Library/PreferencePanes/Tuxera\ NTFS.prefPane/Contents/MacOS/Tuxera\ NTFS`二进制文件中，具体的值为
+Tuxera NTFS将官方ECC公钥写在了如下几个文件中：
+
+|No.|Path|
+|---|----|
+|1|`/Library/PreferencePanes/Tuxera\ NTFS.prefPane/Contents/MacOS/Tuxera\ NTFS`|
+|2|`/Library/PreferencePanes/Tuxera\ NTFS.prefPane/Contents/Resources/WriteActivationData`|
+|3|`/Library/PreferencePanes/Tuxera\ NTFS.prefPane/Contents/Resources/WriteActivationDataTiger`|
+|4|`/Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.4/ntfsck`|
+|5|`/Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.4/tuxera_ntfs`|
+|6|`/Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.5/ntfsck`|
+|7|`/Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.5/tuxera_ntfs`|
+
+公钥具体的值为
 
 <p align="center">
 <img src="https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20%5Cmathbf%7BP%7D%26%3D%28P_x%2C%20P_y%29%5C%5C%20%26%3D%28%5Ctextrm%7B0x47CFB5F7E8931EC93D42D1221E7F%7D%2C%5Ctextrm%7B0x985D74AF455370F347398E1B1D3E%7D%29%20%5Cend%7Balign*%7D">
@@ -67,7 +79,7 @@ Tuxera NTFS将官方ECC公钥写在了`/Library/PreferencePanes/Tuxera\ NTFS.pre
 以下将说明长激活密钥是如何生成的：
 
   1. 生成一个大数 ![](http://latex.codecogs.com/gif.latex?r) ，其中 ![](http://latex.codecogs.com/gif.latex?r )必须满足 ![](http://latex.codecogs.com/gif.latex?0%3Cr%3Cn)  。
-  
+
   2. 计算![](http://latex.codecogs.com/gif.latex?r%5Cmathbf%7BG%7D)。
 
   3. 准备好一个buffer `uint8_t bin_rG[2][14]`。将大数 ![](http://latex.codecogs.com/gif.latex?%28r%5Cmathbf%7BG%7D%29_x) 和 ![](http://latex.codecogs.com/gif.latex?%28r%5Cmathbf%7BG%7D%29_y) 按照 __大端字节序__ 分别写入到`bin_rG[0]` 和 `bin_rG[1]`中。如果大数没有14个字节，则在高位补“0”字节即可。
@@ -153,7 +165,7 @@ Tuxera NTFS将官方ECC公钥写在了`/Library/PreferencePanes/Tuxera\ NTFS.pre
  <img src="https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20s%5Cmathbf%7BG%7D&plus;h%5Cmathbf%7BP%7D%26%3D%28r-h%5Ccdot%20k%29%5Cmathbf%7BG%7D&plus;h%5Cmathbf%7BP%7D%5C%5C%20%26%3Dr%5Cmathbf%7BG%7D-h%5Ccdot%20k%5Cmathbf%7BG%7D&plus;h%5Cmathbf%7BP%7D%5C%5C%20%26%3Dr%5Cmathbf%7BG%7D-h%5Cmathbf%7BP%7D&plus;h%5Cmathbf%7BP%7D%5C%5C%20%26%3Dr%5Cmathbf%7BG%7D%20%5Cend%7Balign*%7D">
 </p>
 
-所以`key_data`的后5字必然与`Hash`相同：这是长激活密钥有效的必要条件。如果不等，则长激活密钥必然不是合法的激活密钥。
+所以`key_data`的后5字节必然与`Hash`相同：这是长激活密钥有效的必要条件。如果不等，则长激活密钥必然不是合法的激活密钥。
 
 ### 3.2 短激活密钥是如何被验证的？
 
@@ -192,51 +204,106 @@ Tuxera NTFS将官方ECC公钥写在了`/Library/PreferencePanes/Tuxera\ NTFS.pre
 
 ## 5. 如何使用？
 
-__上次测试时间：2018-07-07__
+__上次测试时间：2018-07-13__
 
-__上次测试版本：2018 (released 2018-01-25)__
+__上次测试版本：2018 (released 2018-01-25)__ 你可以从[这里](https://www.tuxera.com/products/tuxera-ntfs-for-mac/)下载。
 
   1. 编译patcher和keygen。
 
   2. 使用`TuxeraNTFS-patcher`给Tuxera NTFS打个补丁。在控制台中：
 
      ```bash
-     $ sudo ./TuxeraNTFS-patcher /Library/PreferencePanes/Tuxera\ NTFS.prefPane/Contents/MacOS/Tuxera\ NTFS
+     $ sudo ./TuxeraNTFS-patcher
      ```
 
      例如:
 
      ```bash
-     $ sudo ./TuxeraNTFS-patcher /Library/PreferencePanes/Tuxera\ NTFS.prefPane/Contents/MacOS/Tuxera\ NTFS
+     $ sudo ./TuxeraNTFS-patcher
      Password:
      -----secp112r1 Private Key-----
-     Bin: 36 25 23 22 B3 36 41 75 49 FC 9C FE CF EC
+     Bin: 42 EE 5D 2C CD 53 0A 06 43 B9 9A 9E 29 B0
 
      -----secp112r1 Public Key-----
-     Bin: X = CE E5 BB 00 29 F1 10 5B 41 7C FD FE 78 7E
-     Bin: Y = C3 07 5A CE DE 75 2E E1 F1 AC 4D 59 22 6C
+     Bin: X = C3 15 26 EC 75 DE AA 90 4C 70 7B 09 2B EC
+     Bin: Y = 68 49 70 AA 04 3D 9F B3 DF 42 63 3D 55 FF
 
      Write private key to tuxera_key.bin successfully.
 
-     patching......
-     Open file successfully.
-     Get file size successfully: 3669616 byte(s).
-     Map file successfully.
-     offset = 0x000000000002ec2a, writing data.....patching is done.
-     offset = 0x000000000014f05e, writing data.....patching is done.
-     offset = 0x0000000000284c40, writing data.....patching is done.
+     Patching...
+     Target file: /Library/PreferencePanes/Tuxera NTFS.prefPane/Contents/MacOS/Tuxera NTFS
+     Open file successfully!
+     File size: 3669616 byte(s).
+     Map file successfully!
+     offset = 0x000000000002ec2a, writing data.....Patch is done.
+     offset = 0x000000000014f05e, writing data.....Patch is done.
+     offset = 0x0000000000284c40, writing data.....Patch is done.
      Modified: 3
+
+     Target file: /Library/PreferencePanes/Tuxera NTFS.prefPane/Contents/Resources/WriteActivationData
+     Open file successfully!
+     File size: 3180416 byte(s).
+     Map file successfully!
+     offset = 0x000000000002366e, writing data.....Patch is done.
+     offset = 0x000000000011eae6, writing data.....Patch is done.
+     offset = 0x0000000000226c74, writing data.....Patch is done.
+     Modified: 3
+
+     Target file: /Library/PreferencePanes/Tuxera NTFS.prefPane/Contents/Resources/WriteActivationDataTiger
+     Open file successfully!
+     File size: 2132524 byte(s).
+     Map file successfully!
+     offset = 0x0000000000023c6b, writing data.....Patch is done.
+     offset = 0x0000000000126c84, writing data.....Patch is done.
+     Modified: 2
+
+     Target file: /Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.4/ntfsck
+     Open file successfully!
+     File size: 3135728 byte(s).
+     Map file successfully!
+     offset = 0x0000000000099d07, writing data.....Patch is done.
+     offset = 0x000000000021bd4c, writing data.....Patch is done.
+     Modified: 2
+
+     Target file: /Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.4/tuxera_ntfs
+     Open file successfully!
+     File size: 3005576 byte(s).
+     Map file successfully!
+     offset = 0x000000000008a747, writing data.....Patch is done.
+     offset = 0x00000000001fc754, writing data.....Patch is done.
+     Modified: 2
+
+     Target file: /Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.5/ntfsck
+     Open file successfully!
+     File size: 6195032 byte(s).
+     Map file successfully!
+     offset = 0x0000000000098bc2, writing data.....Patch is done.
+     offset = 0x000000000021d890, writing data.....Patch is done.
+     offset = 0x0000000000379f0a, writing data.....Patch is done.
+     offset = 0x00000000005057a0, writing data.....Patch is done.
+     Modified: 4
+
+     Target file: /Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.5/tuxera_ntfs
+     Open file successfully!
+     File size: 5958616 byte(s).
+     Map file successfully!
+     offset = 0x0000000000089382, writing data.....Patch is done.
+     offset = 0x00000000001fe27c, writing data.....Patch is done.
+     offset = 0x000000000034ec42, writing data.....Patch is done.
+     offset = 0x00000000004cc178, writing data.....Patch is done.
+     Modified: 4
      ```
 
      你会在当前目录下得到`tuxera_key.bin`文件。
 
-  3. 对Tuxera NTFS重新进行代码签名。因为我们对`Tuxera NTFS.prefPane`打了补丁，原先的代码签名已经失效。我们必须进行重签名。在控制台中：
+  3. 对Tuxera NTFS重新进行代码签名。因为我们对`tuxera_ntfs.fs`和`Tuxera NTFS.prefPane`打了补丁，所以它们原先的代码签名已经失效。我们必须对它们进行重签名。在控制台中：
 
      ```bash
+     $ sudo codesign -f -s "your code-sign certificate name" /Library/Filesystems/tuxera_ntfs.fs
      $ sudo codesign -f -s "your code-sign certificate name" /Library/PreferencePanes/Tuxera\ NTFS.prefPane
      ```
 
-     __NOTICE:__ `"your code-sign certificate name"` 应该是你代码签名证书的名字，它应该显示在你的`Keychain.app`中。
+     __注意：__ `"your code-sign certificate name"` 应该是你代码签名证书的名字，它应该显示在你的`Keychain.app`中。
 
   4. 运行`TuxeraNTFS-keygen`来生成激活密钥。在控制台中：
 
@@ -249,14 +316,13 @@ __上次测试版本：2018 (released 2018-01-25)__
      ```bash
      $ ./TuxeraNTFS-keygen ./tuxera_key.bin
      -----secp112r1 Private Key-----
-     Bin: 36 25 23 22 B3 36 41 75 49 FC 9C FE CF EC
+     Bin: 42 EE 5D 2C CD 53 0A 06 43 B9 9A 9E 29 B0
 
      -----secp112r1 Public Key-----
-     Bin: X = CE E5 BB 00 29 F1 10 5B 41 7C FD FE 78 7E
-     Bin: Y = C3 07 5A CE DE 75 2E E1 F1 AC 4D 59 22 6C
+     Bin: X = C3 15 26 EC 75 DE AA 90 4C 70 7B 09 2B EC
+     Bin: Y = 68 49 70 AA 04 3D 9F B3 DF 42 63 3D 55 FF
 
-     Long product key: H49PUJ-4EFXEY-2017P6-2CCG55-364RM6
+     Long product key: 4KPGHH-147M3Q-UHN3M2-C4DYAN-ENACL0
      ```
 
   5. 现在你可以看到激活密钥了。用它激活Tuxera NTFS即可。
-
