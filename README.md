@@ -56,7 +56,19 @@ where null-terminator `\0` is not contained.
   <img src="http://latex.codecogs.com/gif.latex?n%3D%5Ctextrm%7B0xDB7C2ABF62E35E7628DFAC6561C5%7D">
   </p>
 
-  Tuxera NTFS has stored its official public key in `/Library/PreferencePanes/Tuxera\ NTFS.prefPane/Contents/MacOS/Tuxera\ NTFS` which is
+  Tuxera NTFS has stored its official public key in the following files:
+
+  |Path|
+  |----|
+  |`/Library/PreferencePanes/Tuxera\ NTFS.prefPane/Contents/MacOS/Tuxera\ NTFS`|
+  |`/Library/PreferencePanes/Tuxera\ NTFS.prefPane/Contents/Resources/WriteActivationData`|
+  |`/Library/PreferencePanes/Tuxera\ NTFS.prefPane/Contents/Resources/WriteActivationDataTiger`|
+  |`/Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.4/ntfsck`|
+  |`/Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.4/tuxera_ntfs`|
+  |`/Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.5/ntfsck`|
+  |`/Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.5/tuxera_ntfs`|
+
+  The public key is
 
   <p align="center">
   <img src="https://latex.codecogs.com/gif.latex?%5Cbegin%7Balign*%7D%20%5Cmathbf%7BP%7D%26%3D%28P_x%2C%20P_y%29%5C%5C%20%26%3D%28%5Ctextrm%7B0x47CFB5F7E8931EC93D42D1221E7F%7D%2C%5Ctextrm%7B0x985D74AF455370F347398E1B1D3E%7D%29%20%5Cend%7Balign*%7D">
@@ -194,45 +206,100 @@ where null-terminator `\0` is not contained.
 
   __Last Test Time: 2018-07-07__
 
-  __Last Test Version: 2018 (released 2018-01-25)__
+  __Last Test Version: 2018 (released 2018-01-25)__ Download from [here](https://www.tuxera.com/products/tuxera-ntfs-for-mac/):
 
   1. Build patcher and keygen.
 
   2. Use `TuxeraNTFS-patcher` to make a patch for Tuxera NTFS. In console:
 
      ```bash
-     $ sudo ./TuxeraNTFS-patcher /Library/PreferencePanes/Tuxera\ NTFS.prefPane/Contents/MacOS/Tuxera\ NTFS
+     $ sudo ./TuxeraNTFS-patcher
      ```
 
      Example:
 
      ```bash
-     $ sudo ./TuxeraNTFS-patcher /Library/PreferencePanes/Tuxera\ NTFS.prefPane/Contents/MacOS/Tuxera\ NTFS
+     $ sudo ./TuxeraNTFS-patcher
      Password:
      -----secp112r1 Private Key-----
-     Bin: 36 25 23 22 B3 36 41 75 49 FC 9C FE CF EC
+     Bin: 42 EE 5D 2C CD 53 0A 06 43 B9 9A 9E 29 B0
 
      -----secp112r1 Public Key-----
-     Bin: X = CE E5 BB 00 29 F1 10 5B 41 7C FD FE 78 7E
-     Bin: Y = C3 07 5A CE DE 75 2E E1 F1 AC 4D 59 22 6C
+     Bin: X = C3 15 26 EC 75 DE AA 90 4C 70 7B 09 2B EC
+     Bin: Y = 68 49 70 AA 04 3D 9F B3 DF 42 63 3D 55 FF
 
      Write private key to tuxera_key.bin successfully.
 
-     patching......
-     Open file successfully.
-     Get file size successfully: 3669616 byte(s).
-     Map file successfully.
-     offset = 0x000000000002ec2a, writing data.....patching is done.
-     offset = 0x000000000014f05e, writing data.....patching is done.
-     offset = 0x0000000000284c40, writing data.....patching is done.
+     Patching...
+     Target file: /Library/PreferencePanes/Tuxera NTFS.prefPane/Contents/MacOS/Tuxera NTFS
+     Open file successfully!
+     File size: 3669616 byte(s).
+     Map file successfully!
+     offset = 0x000000000002ec2a, writing data.....Patch is done.
+     offset = 0x000000000014f05e, writing data.....Patch is done.
+     offset = 0x0000000000284c40, writing data.....Patch is done.
      Modified: 3
+
+     Target file: /Library/PreferencePanes/Tuxera NTFS.prefPane/Contents/Resources/WriteActivationData
+     Open file successfully!
+     File size: 3180416 byte(s).
+     Map file successfully!
+     offset = 0x000000000002366e, writing data.....Patch is done.
+     offset = 0x000000000011eae6, writing data.....Patch is done.
+     offset = 0x0000000000226c74, writing data.....Patch is done.
+     Modified: 3
+
+     Target file: /Library/PreferencePanes/Tuxera NTFS.prefPane/Contents/Resources/WriteActivationDataTiger
+     Open file successfully!
+     File size: 2132524 byte(s).
+     Map file successfully!
+     offset = 0x0000000000023c6b, writing data.....Patch is done.
+     offset = 0x0000000000126c84, writing data.....Patch is done.
+     Modified: 2
+
+     Target file: /Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.4/ntfsck
+     Open file successfully!
+     File size: 3135728 byte(s).
+     Map file successfully!
+     offset = 0x0000000000099d07, writing data.....Patch is done.
+     offset = 0x000000000021bd4c, writing data.....Patch is done.
+     Modified: 2
+
+     Target file: /Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.4/tuxera_ntfs
+     Open file successfully!
+     File size: 3005576 byte(s).
+     Map file successfully!
+     offset = 0x000000000008a747, writing data.....Patch is done.
+     offset = 0x00000000001fc754, writing data.....Patch is done.
+     Modified: 2
+
+     Target file: /Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.5/ntfsck
+     Open file successfully!
+     File size: 6195032 byte(s).
+     Map file successfully!
+     offset = 0x0000000000098bc2, writing data.....Patch is done.
+     offset = 0x000000000021d890, writing data.....Patch is done.
+     offset = 0x0000000000379f0a, writing data.....Patch is done.
+     offset = 0x00000000005057a0, writing data.....Patch is done.
+     Modified: 4
+
+     Target file: /Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.5/tuxera_ntfs
+     Open file successfully!
+     File size: 5958616 byte(s).
+     Map file successfully!
+     offset = 0x0000000000089382, writing data.....Patch is done.
+     offset = 0x00000000001fe27c, writing data.....Patch is done.
+     offset = 0x000000000034ec42, writing data.....Patch is done.
+     offset = 0x00000000004cc178, writing data.....Patch is done.
+     Modified: 4
      ```
 
      You will get `tuxera_key.bin` file at current directory.
 
-  3. Re-codesign Tuxera NTFS. Because we made a patch to `Tuxera NTFS.prefPane`, the original code signature became invalid. So we have to re-codesign it. In console:
+  3. Re-codesign Tuxera NTFS. Because we made a patch to `tuxera_ntfs.fs` and `Tuxera NTFS.prefPane`, their original code signatures became invalid. So we have to re-codesign them. In console:
 
      ```bash
+     $ sudo codesign -f -s "your code-sign certificate name" /Library/Filesystems/tuxera_ntfs.fs
      $ sudo codesign -f -s "your code-sign certificate name" /Library/PreferencePanes/Tuxera\ NTFS.prefPane
      ```
 
@@ -249,13 +316,13 @@ where null-terminator `\0` is not contained.
      ```bash
      $ ./TuxeraNTFS-keygen ./tuxera_key.bin
      -----secp112r1 Private Key-----
-     Bin: 36 25 23 22 B3 36 41 75 49 FC 9C FE CF EC
+     Bin: 42 EE 5D 2C CD 53 0A 06 43 B9 9A 9E 29 B0
 
      -----secp112r1 Public Key-----
-     Bin: X = CE E5 BB 00 29 F1 10 5B 41 7C FD FE 78 7E
-     Bin: Y = C3 07 5A CE DE 75 2E E1 F1 AC 4D 59 22 6C
+     Bin: X = C3 15 26 EC 75 DE AA 90 4C 70 7B 09 2B EC
+     Bin: Y = 68 49 70 AA 04 3D 9F B3 DF 42 63 3D 55 FF
 
-     Long product key: H49PUJ-4EFXEY-2017P6-2CCG55-364RM6
+     Long product key: 4KPGHH-147M3Q-UHN3M2-C4DYAN-ENACL0
      ```
 
   5. Now you can see product key. Just use it to activate your Tuxera NTFS.

@@ -14,15 +14,26 @@
 #include <sys/stat.h>
 #include <sys/mman.h>
 
+#define _countof(x) (sizeof((x))/sizeof((x)[0]))
+
 //--------in helper.c
 extern void PrintBytes(const uint8_t* bytes, size_t len);
 extern unsigned long PrintKeyInfo(const EC_KEY* lpcECKey, int* lperrno);
 //--------end
 
-
 const uint8_t OfficialPublicKey[] = {
     0x47, 0xcf, 0xb5, 0xf7, 0xe8, 0x93, 0x1e, 0xc9, 0x3d, 0x42, 0xd1, 0x22, 0x1e, 0x7f,
     0x98, 0x5d, 0x74, 0xaf, 0x45, 0x53, 0x70, 0xf3, 0x47, 0x39, 0x8e, 0x1b, 0x1d, 0x3e
+};
+
+const char* PatchFileList[] = {
+    "/Library/PreferencePanes/Tuxera NTFS.prefPane/Contents/MacOS/Tuxera NTFS",
+    "/Library/PreferencePanes/Tuxera NTFS.prefPane/Contents/Resources/WriteActivationData",
+    "/Library/PreferencePanes/Tuxera NTFS.prefPane/Contents/Resources/WriteActivationDataTiger",
+    "/Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.4/ntfsck",
+    "/Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.4/tuxera_ntfs",
+    "/Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.5/ntfsck",
+    "/Library/Filesystems/tuxera_ntfs.fs/Contents/Resources/Support/10.5/tuxera_ntfs"
 };
 
 void DoPatch(uint8_t* lpFileContent,
@@ -49,55 +60,90 @@ off_t SearchOfficialPublicKey(uint8_t* lpFileContent, size_t FileSize, off_t sta
     return ret;
 }
 
-void StartPatch(const char* lpszFilePath, const uint8_t* lpcNewPublicKey, size_t KeySize) {
+int OpenFile(const char* lpszFilePath) {
+    int fd = open(lpszFilePath, O_RDWR, S_IRUSR | S_IWUSR);
+    if (fd == -1)
+        printf("Failed to open file. CODE: 0x%08x\n", errno);
+    
+    return fd;
+}
+
+size_t GetFileSize(int fd) {
+    struct stat fd_stat = {};
+    if (fstat(fd, &fd_stat) != 0) {
+        printf("Failed to get file size. CODE: 0x%08x\n", errno);
+        return (size_t)-1;
+    } else {
+        return (size_t)fd_stat.st_size;
+    }
+}
+
+void* MapFileContent(int fd, size_t map_size) {
+    void* lpFileContent = (void*)-1;
+    lpFileContent = mmap(NULL, map_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+    if (lpFileContent == (void*)-1)
+        printf("Failed to map file. CODE: 0x%08x\n", errno);
+    
+    return lpFileContent;
+}
+
+int UnmapFileContent(void* lpFileContent, size_t map_size) {
+    return munmap(lpFileContent, map_size);
+}
+
+void StartPatch(const uint8_t* lpcNewPublicKey, size_t KeySize) {
     off_t offset = -1;
     int fd = -1;
     struct stat fd_stat = {};
     uint8_t* lpFileContent = NULL;
-
-    printf("patching......\n");
-
-    fd = open(lpszFilePath, O_RDWR, S_IRUSR | S_IWUSR);
-    if (fd == -1) {
-        printf("Failed to open file. CODE: 0x%08x\n", errno);
-        goto On_SearchOfficialPublicKey_Error;
-    } else {
-        printf("Open file successfully.\n");
-    }
-
-    if (fstat(fd, &fd_stat) != 0) {
-        printf("Failed to get file size. CODE: 0x%08x\n", errno);
-        goto On_SearchOfficialPublicKey_Error;
-    } else {
-        printf("Get file size successfully: %zu byte(s).\n", fd_stat.st_size);
-    }
-
-    lpFileContent = mmap(NULL, fd_stat.st_size, PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
-    if (lpFileContent == (void*)-1) {
-        printf("Failed to map file. CODE: 0x%08x\n", errno);
-        goto On_SearchOfficialPublicKey_Error;
-    } else {
-        printf("Map file successfully.\n");
-    }
-
-    int found = 0;
-    while (1) {
-        offset = SearchOfficialPublicKey(lpFileContent, fd_stat.st_size, offset + 1);
-        if (offset == -1)
-            break;
-        found++;
-        printf("offset = 0x%016llx, writing data.....", offset);
-        DoPatch(lpFileContent, offset, lpcNewPublicKey, KeySize);
-        printf("patching is done.\n");
-    }
-
-    printf("Modified: %d\n", found);
-
-On_SearchOfficialPublicKey_Error:
-    if (lpFileContent != NULL)
-        munmap(lpFileContent, fd_stat.st_size);
-    if (fd != -1)
+    
+    printf("Patching...\n");
+    for (size_t i = 0; i < _countof(PatchFileList); ++i) {
+        int fd = -1;
+        size_t stFileSize = (size_t)-1;
+        uint8_t* lpFileContent = NULL;
+        
+        printf("Target file: %s\n", PatchFileList[i]);
+        fd = OpenFile(PatchFileList[i]);
+        if (fd == -1)
+            return;
+        
+        printf("Open file successfully!\n");
+        
+        stFileSize = GetFileSize(fd);
+        if (stFileSize == (size_t)-1) {
+            close(fd);
+            return;
+        }
+        
+        printf("File size: %zu byte(s).\n", stFileSize);
+        
+        lpFileContent = MapFileContent(fd, stFileSize);
+        if (lpFileContent == (void*)-1) {
+            close(fd);
+            return;
+        }
+        
+        printf("Map file successfully!\n");
+        
+        int found = 0;
+        off_t offset = -1;
+        while (1) {
+            offset = SearchOfficialPublicKey(lpFileContent, stFileSize, offset + 1);
+            if (offset == -1)
+                break;
+            found++;
+            
+            printf("offset = 0x%016llx, writing data.....", offset);
+            DoPatch(lpFileContent, offset, lpcNewPublicKey, KeySize);
+            printf("Patch is done.\n");
+        }
+        
+        printf("Modified: %d\n\n", found);
+        
+        UnmapFileContent(lpFileContent, stFileSize);
         close(fd);
+    }
 }
 
 char SaveKey(const char* lpcszFileName,
@@ -126,18 +172,7 @@ char SaveKey(const char* lpcszFileName,
     return 1;
 }
 
-void help() {
-    printf("Usage:\n");
-    printf("    ./TuxeraNTFS-patcher <TuxeraNTFS.prefPane executable file>\n");
-    printf("\n");
-}
-
 int main(int argc, char* argv[]) {
-    if (argc != 2) {
-        help();
-        return 0;
-    }
-
     unsigned long ErrorCode = 0;
 
     EC_KEY* newKey = NULL;
@@ -221,7 +256,7 @@ int main(int argc, char* argv[]) {
     }
     printf("\n");
 
-    StartPatch(argv[1], (uint8_t*)binPublicKey, sizeof(binPublicKey));
+    StartPatch((uint8_t*)binPublicKey, sizeof(binPublicKey));
 
 On_main_Error:
     if (PublicKeyY)
